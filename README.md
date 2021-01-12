@@ -1,1 +1,1 @@
-# kanban-client
+. kanban-client
