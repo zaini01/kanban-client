@@ -3,138 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <meta name="google-signin-client_id" content="377768704545-v8vea0advs413kddoc6hc75u4e2e2467.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
-    <div class="container-fluid">
-        <div class="d-flex justify-content-center">
+<body style="background: #1f2e3d;">
+    
+    <div class="container-fluid" id="app">
+      <!-- Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top" v-if = "currentDisplay != 'login' && currentDisplay != 'register'">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="" @click.prevent = 'logout()'>Log Out</a>
+          </li>
+          <li class="nav-item">
+            <!-- MODAL -->
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+              Launch demo modal
+            </button>
+          </li>
+          
+        </ul>
+      </nav>
 
+      <!-- REGISTER -->
+      <div v-if = "currentDisplay == 'register'">
+        <div class="d-flex justify-content-center p-5">
+            <form class="bg-warning w-40 p-4" @submit.prevent = 'register()'>
+                <h2 style="text-align: center;">Sign Up</h4><br>
+                <label class="form-label">First Name</label>
+                  <input v-model:value = 'user.firstName' type="text" class="form-control" placeholder="Daniel">
+                <label class="form-label">Last Name</label>
+                  <input v-model:value = 'user.lastName' type="text" class="form-control" placeholder="Johns">
+                <label class="form-label">Email address</label>
+                  <input v-model:value = 'user.email' type="email" class="form-control"  placeholder="name@example.com">
+                <label class="form-label">Password</label>
+                  <input v-model:value = 'user.password' type="password" class="form-control" placeholder="password">
+                <br>          
+                <div class="d-flex justify-content-around">
+                  <button type="submit" class="btn btn-outline my-2 my-sm-0 btn-primary w-50">Register</button>
+                  <button type="reset" class="btn btn-outline my-2 my-sm-0 btn-primary w-50">Reset</button>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a href="" @click.prevent = 'showLogin()'>Alredy have account! Log in</a>
+            </form>
+        </div>
+      </div>
+
+      <!-- LOGIN -->
+      <div v-if = "currentDisplay == 'login'">
+        <div class="d-flex justify-content-center p-5">
+            <form class="bg-warning w-40 p-4" @submit.prevent = 'login()'>
+                <h2 style="text-align: center;">Sign In</h4><br>
+                <label class="form-label">Email address</label>
+                  <input v-model:value = 'user.email' type="email" class="form-control" placeholder="name@example.com">
+                <br>
+                <label class="form-label">Password</label>
+                  <input v-model:value = 'user.password' type="password" class="form-control" placeholder="password">
+                <br>
+                <div class="d-flex justify-content-around">
+                  <button type="submit" class="btn btn-outline my-2 my-sm-0 btn-primary w-50">Log in</button>
+                  <button type="reset" class="btn btn-outline my-2 my-sm-0 btn-primary w-50">Reset</button>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div style="float: right;" class="g-signin2" data-onsuccess="onSignIn"></div><br><br>
+                <div class="dropdown-divider"></div>
+                <a href="" @click.prevent = 'showRegister()'>New around here? Register</a>
+            </form>
+        </div>
+      </div>
+
+      <!-- KANBA -->
+      <div v-if = "currentDisplay == 'kanban'" class="d-flex">
+
+          
           <!-- COL 1 -->
-          <div class="flex-column">
+          <div class="flex-column w-25">
 
-            <div class="bg-warning m-2">
+            <div class="bg-warning m-2 p-2">
               <h4 class="text-center">BACK_LOG</h4>
             
               <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
                   <h5 class="card-title">Card title</h5>
+                  <div class="dropdown-divider border border-dark"></div>
                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-              <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <div class="dropdown-divider border border-dark"></div>
+                  <button class="btn btn-primary btn-sm">Edit</button>
+                  <button class="btn btn-primary btn-sm">Delete</button>
+                  <button class="btn btn-primary btn-sm">Go todo</button>
+                  <!-- <button class="btn btn-primary btn-sm">TODO</button> -->
                 </div>
               </div>
 
-          </div>
+            </div>
 
           </div>
 
           <!-- COL 2 -->
-          <div class="flex-column">
+          <div class="flex-column w-25">
             
-            <div class="bg-info m-2">
+            <div class="bg-info m-2 p-2">
               <h4 class="text-center">TODO</h4>
-            
+<!--             
               <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
                   <h5 class="card-title">Card title</h5>
+                  <div class="dropdown-divider border border-dark"></div>
                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <div class="dropdown-divider border border-dark"></div>
+                  <button class="btn btn-primary">Edit</button>
+                  <button class="btn btn-primary">TODO</button>
                 </div>
-              </div>
+              </div> -->
 
             </div>
           </div>
 
           <!-- COL 3 -->
-          <div class="flex-column">
+          <div class="flex-column w-25">
             
-            <div class="bg-primary m-2">
+            <div class="bg-primary m-2 p-2">
               <h4 class="text-center">ON_PROGRESS</h4>
-            
-              <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
+
+              <!-- <div class="card m-2">
                 <div class="card-body">
                   <h5 class="card-title">Card title</h5>
+                  <div class="dropdown-divider border border-dark"></div>
                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <div class="dropdown-divider border border-dark"></div>
+                  <button class="btn btn-primary">Edit</button>
+                  <button class="btn btn-primary">TODO</button>
                 </div>
-              </div>
+              </div> -->
 
             </div>
           </div>
 
           <!-- COL 4 -->
-          <div class="flex-column">
+          <div class="flex-column w-25">
             
-            <div class="bg-danger m-2">
+            <div class="bg-danger m-2 p-2">
               <h4 class="text-center">DONE</h4>
             
-              <div class="card m-2">
-                <img class="card-img-top" src="..." alt="Card image cap">
+              <!-- <div class="card m-2">
                 <div class="card-body">
                   <h5 class="card-title">Card title</h5>
+                  <div class="dropdown-divider border border-dark"></div>
                   <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <div class="dropdown-divider border border-dark"></div>
+                  <button class="btn btn-primary">Edit</button>
+                  <button class="btn btn-primary">TODO</button>
                 </div>
-              </div>
+              </div> -->
 
             </div>
           </div>
@@ -143,7 +167,66 @@
 
 
 
-        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <!-- CONTENT -->
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <!-- BODY -->
+                    <div class="modal-body w-200">
+                      <input/>
+                      <hr>
+                      <input/>
+                      <hr>
+                      <input/>
+                      <hr>
+                      <input/>
+                      <hr>
+                      <input/>
+                    </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
       </div>
+    </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+      <script src="https://apis.google.com/js/platform.js" async defer></script>
+      <script src="https://unpkg.com/axios/dist/axios.min.js" ></script>
+      <script src="./main.js"></script>
 </body>
 </html>
