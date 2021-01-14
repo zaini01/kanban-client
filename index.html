@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id" content="377768704545-v8vea0advs413kddoc6hc75u4e2e2467.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="377768704545-0777o7cao203rv36kofp95jc5fqtrlgi.apps.googleusercontent.com">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -12,6 +12,7 @@
 <body style="background: #1f2e3d;">
     
     <div class="container-fluid" id="app">
+
       <!-- Navigation -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top" v-if = "currentDisplay != 'login' && currentDisplay != 'register'">
         <ul class="navbar-nav ml-auto">
@@ -19,13 +20,11 @@
             <a class="nav-link" href="" @click.prevent = 'logout()'>Log Out</a>
           </li>
           <li class="nav-item">
-            <!-- MODAL -->
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-              Launch demo modal
+            <button @click = 'clearKanban()' type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAdd">
+              Add New
             </button>
           </li>
-          
         </ul>
       </nav>
 
@@ -78,29 +77,25 @@
 
       <!-- KANBA -->
       <div v-if = "currentDisplay == 'kanban'" class="d-flex">
-
           
           <!-- COL 1 -->
           <div class="flex-column w-25">
-
             <div class="bg-warning m-2 p-2">
               <h4 class="text-center">BACK_LOG</h4>
-            
-              <div class="card m-2">
+
+              <div class="card m-2" v-for = 'backLog in backLogs' :key = 'backLog.id'>
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
+                  <h5 class="card-title">{{backLog.title}}</h5>
                   <div class="dropdown-divider border border-dark"></div>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <p class="card-text">{{backLog.description}}</p>
                   <div class="dropdown-divider border border-dark"></div>
-                  <button class="btn btn-primary btn-sm">Edit</button>
-                  <button class="btn btn-primary btn-sm">Delete</button>
-                  <button class="btn btn-primary btn-sm">Go todo</button>
-                  <!-- <button class="btn btn-primary btn-sm">TODO</button> -->
+                  <button @click = 'findOne(backLog.id)' class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalEdit">Edit</button>
+                  <button @click = 'destroy(backLog.id)' class="btn btn-primary btn-sm">Delete</button>
+                  <button @click = 'patch("TODO",backLog.id)' class="btn btn-primary btn-sm">Go to Todo</button>
                 </div>
               </div>
 
             </div>
-
           </div>
 
           <!-- COL 2 -->
@@ -108,17 +103,19 @@
             
             <div class="bg-info m-2 p-2">
               <h4 class="text-center">TODO</h4>
-<!--             
-              <div class="card m-2">
+          
+              <div class="card m-2" v-for = 'todo in todos' :key = 'todo.id'>
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
+                  <h5 class="card-title">{{todo.title}}</h5>
                   <div class="dropdown-divider border border-dark"></div>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <p class="card-text">{{todo.description}}</p>
                   <div class="dropdown-divider border border-dark"></div>
-                  <button class="btn btn-primary">Edit</button>
-                  <button class="btn btn-primary">TODO</button>
+                  <button @click = 'patch("BACK-LOG",todo.id)' class="btn btn-primary btn-sm">Back to Log</button>
+                  <button class="btn btn-primary btn-sm">Edit</button>
+                  <button @click = 'destroy(todo.id)' class="btn btn-primary btn-sm">Delete</button>
+                  <button @click = 'patch("ON-PROGRES",todo.id)' class="btn btn-primary btn-sm">Go Progres</button>
                 </div>
-              </div> -->
+              </div>
 
             </div>
           </div>
@@ -129,16 +126,18 @@
             <div class="bg-primary m-2 p-2">
               <h4 class="text-center">ON_PROGRESS</h4>
 
-              <!-- <div class="card m-2">
+              <div class="card m-2" v-for = 'onProgres in onProgress' :key = 'onProgres.id'>
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
+                  <h5 class="card-title">{{onProgres.title}}</h5>
                   <div class="dropdown-divider border border-dark"></div>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <p class="card-text">{{onProgres.description}}</p>
                   <div class="dropdown-divider border border-dark"></div>
-                  <button class="btn btn-primary">Edit</button>
-                  <button class="btn btn-primary">TODO</button>
+                  <button @click = 'patch("TODO",onProgres.id)' class="btn btn-primary btn-sm">Back to Todo</button>
+                  <button class="btn btn-primary btn-sm">Edit</button>
+                  <button @click = 'destroy(onProgres.id)' class="btn btn-primary btn-sm">Delete</button>
+                  <button @click = 'patch("DONE",onProgres.id)' class="btn btn-primary btn-sm">Mark as Done</button>
                 </div>
-              </div> -->
+              </div>
 
             </div>
           </div>
@@ -149,44 +148,23 @@
             <div class="bg-danger m-2 p-2">
               <h4 class="text-center">DONE</h4>
             
-              <!-- <div class="card m-2">
+              <div class="card m-2" v-for = 'done in dones' :key = 'done.id'>
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
+                  <h5 class="card-title">{{done.title}}</h5>
                   <div class="dropdown-divider border border-dark"></div>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <p class="card-text">{{done.description}}</p>
                   <div class="dropdown-divider border border-dark"></div>
-                  <button class="btn btn-primary">Edit</button>
-                  <button class="btn btn-primary">TODO</button>
+                  <button @click = 'patch("ON-PROGRES",done.id)' class="btn btn-primary btn-sm">Back to Progres</button>
+                  <button class="btn btn-primary btn-sm">Edit</button>
+                  <button @click = 'destroy(done.id)' class="btn btn-primary btn-sm">Delete</button>
                 </div>
-              </div> -->
+              </div>
 
             </div>
           </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <!-- Modal Edit-->
+          <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <!-- CONTENT -->
@@ -197,29 +175,62 @@
                   </button>
                 </div>
                 <!-- BODY -->
-                    <div class="modal-body w-200">
-                      <input/>
+                    <div class="modal-body">
+                      <label>Title</label>
+                      <input v-model:value = 'task.title' class="w-100"/>
                       <hr>
-                      <input/>
+                      <label>Description</label>
+                      <textarea v-model:value = 'task.description' class="w-100"></textarea>
                       <hr>
-                      <input/>
+                      <label>Point</label>
+                      <input v-model:value = 'task.point' class="w-100"/>
                       <hr>
-                      <input/>
-                      <hr>
-                      <input/>
+                      <label>Assign to</label>
+                      <input v-model:value = 'task.assignTo' class="w-100"/>
                     </div>
-
+                <!-- Footer -->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+                  <button @click = 'put' type="click" class="btn btn-primary" data-dismiss="modal">Submit</button>
                 </div>
               </div>
             </div>
           </div>
+          
 
-
-
-
+          <!-- Modal Add-->
+          <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <!-- CONTENT -->
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <!-- BODY -->
+                    <div class="modal-body">
+                      <label>Title</label>
+                      <input v-model:value = 'task.title' class="w-100"/>
+                      <hr>
+                      <label>Description</label>
+                      <textarea v-model:value = 'task.description' class="w-100"></textarea>
+                      <hr>
+                      <label>Point</label>
+                      <input v-model:value = 'task.point' class="w-100"/>
+                      <hr>
+                      <label>Assign to</label>
+                      <input v-model:value = 'task.assignTo' class="w-100"/>
+                    </div>
+                <!-- Footer -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button @click = 'add()' type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
       </div>
     </div>
