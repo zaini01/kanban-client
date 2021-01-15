@@ -21,58 +21,6 @@ var app = new Vue({
         kanbans:[],
     },
     methods:{
-        showRegister(){
-            this.currentDisplay = 'register'
-        },
-        showLogin(){
-            this.currentDisplay = 'login'
-        },
-        login(){
-            axios.post(localhost+'/login',{email:this.user.email,password:this.user.password})
-            .then(({data})=>{
-                localStorage.setItem('accesstoken',data.accesstoken)
-                this.check()
-            })
-            .catch(err=>{
-                this.user.password = ''
-            })
-        },
-        register(){
-            axios.post(localhost+'/register',{
-                email:this.user.email,
-                password:this.user.password,
-                firstName:this.user.firstName,
-                lastName:this.user.lastName
-            })
-            .then(({data})=>{
-                return axios.post(localhost+'/login',{email:data.email,password:this.user.password})
-            })
-            .then(({data})=>{
-                localStorage.setItem('accesstoken',data.accesstoken)
-                this.check()
-            })
-            .catch(err=>{
-                this.check()
-                console.log(err);
-            })
-        },
-        add(){
-            let data = {
-                title:this.task.title,
-                description:this.task.description,
-                point:this.task.point,
-                assignTo:this.task.assignTo
-            }
-
-            axios.post(localhost+'/kanban',data,{headers : {accesstoken:localStorage.accesstoken}})
-            .then(({data})=>{
-                this.check()
-            })
-            .catch(err=>{
-                this.check()
-                console.log(err);
-            })
-        },
         put(){
 
             axios.put(localhost+`/kanban/${this.task.id}`,this.task,{headers : {accesstoken:localStorage.accesstoken}})
@@ -97,16 +45,6 @@ var app = new Vue({
                 console.log(err);
             })
         },
-        destroy(id){
-            axios.delete(localhost+`/kanban/${id}`,{headers : {accesstoken:localStorage.accesstoken}})
-            .then(({data})=>{
-                this.check()
-            })
-            .catch(err=>{
-                this.check()
-                console.log(err);
-            })
-        },
         findAll(){
             axios.get(localhost+'/kanban',{headers:{accesstoken:localStorage.accesstoken}})
             .then(({data})=>{
@@ -116,20 +54,7 @@ var app = new Vue({
                 console.log(err);
             })
         },
-        findOne(id){
-            axios.get(localhost+`/kanban/${id}`,{headers:{accesstoken:localStorage.accesstoken}})
-            .then(({data})=>{
-                this.task.id = data.id
-                this.task.title = data.title
-                this.task.description = data.description
-                this.task.point = data.point
-                this.task.status = data.status
-                this.task.assignTo = data.assignTo
-            })
-            .catch(err=>{
-                console.log(err);
-            })
-        },
+        
         check(){
             this.clearUser()
             this.clearKanban()
