@@ -1,4 +1,4 @@
-const localhost = 'http://localhost:3000'
+const localhost = 'https://my-kanban-h8.herokuapp.com'
 
 var app = new Vue({
     el: "#app",

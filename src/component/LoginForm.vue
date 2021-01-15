@@ -26,7 +26,7 @@ export default {
     name:"LoginForm",
     data(){
         return {
-            localhost:'http://localhost:3000',
+            localhost:'https://my-kanban-h8.herokuapp.com',
             user:{
                 email:'',
                 password:''

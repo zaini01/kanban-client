@@ -31,7 +31,7 @@ export default {
     name:"App",
     data(){
         return {
-            localhost:'http://localhost:3000',
+            localhost:'https://my-kanban-h8.herokuapp.com',
             currentPage:"login",
             tasks:[],
             categories: ['BACK-LOG','TODO','ON-PROGRES','DONE'] 

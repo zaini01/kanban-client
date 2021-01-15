@@ -29,7 +29,7 @@ export default {
     props:['taskCard'],
     data(){
         return {
-            localhost:'http://localhost:3000',
+            localhost:'https://my-kanban-h8.herokuapp.com',
             task:{
                 id:'',
                 title:'',

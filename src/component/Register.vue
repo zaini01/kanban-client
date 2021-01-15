@@ -29,7 +29,7 @@ export default {
     name:"Register",
     data(){
         return {
-            localhost:'http://localhost:3000',
+            localhost:'https://my-kanban-h8.herokuapp.com',
             email : '',
             password : '',
             firstName : '',
