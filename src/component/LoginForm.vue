@@ -62,15 +62,7 @@ export default {
             this.user.firstName = name[0]
             this.user.lastName = name[1]
             this.user.password = 'Google'
-            axios.post(this.localhost+'/oauth',this.user)
-            .then(({data})=>{
-                localStorage.setItem('accesstoken',data.accesstoken)
-                this.$emit('changeCurrentPage','kanban')
-                this.check()
-            })
-            .catch(err=>{
-                console.log(err);
-            })
+            this.$emit('oauth',this.user)
         },
         onFailure(err) {
             console.log(err);

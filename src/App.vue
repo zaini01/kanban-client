@@ -3,7 +3,8 @@
   <LoginForm 
     v-if="currentPage == 'login'" 
     @changeCurrentPage='changeCurrentPage'
-    @login='login'>
+    @login='login'
+    @oauth='oauth'>
   </LoginForm>
 
   <Register 
@@ -77,6 +78,17 @@ export default {
             })
             .catch(err=>{
                 user.password = ''
+            })
+        },
+        oauth(user){
+            axios.post(this.localhost+'/oauth',user)
+            .then(({data})=>{
+                localStorage.setItem('accesstoken',data.accesstoken)
+                this.currentPage = 'kanban'
+                this.check()
+            })
+            .catch(err=>{
+                console.log(err);
             })
         }
     },
